@@ -32,6 +32,15 @@ namespace UserManager.Web
             {
                 p.EnableEndpointRouting = false;
             });
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder => builder.SetIsOriginAllowed(_ => true)
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
+
             var appSettingsSection = Configuration.GetSection("English");
             services.Configure<AppSetting>(appSettingsSection);
             var appSettings = appSettingsSection.Get<AppSetting>();
@@ -124,7 +133,16 @@ namespace UserManager.Web
                 app.UseHsts();
             }
 
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
+                context.Response.Headers.Remove("Server");
+                context.Response.Headers.Remove("X-Powered-By");
+                await next();
+            });
 
+
+            app.UseCors();
             app.UseAuthentication();
             app.UseMvc();
         }
