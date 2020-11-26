@@ -72,5 +72,31 @@ namespace UserManager.Web.Controllers
                 return StatusCode(503, errorManagerTool.SetError<UserModelDto>(ex, MethodBase.GetCurrentMethod()));
             }
         }
+
+        [HttpPost]
+        [Route("NewUser")]
+        [ProducesResponseType(typeof(Result<UserModelDto>), 200)]
+        [ProducesResponseType(typeof(Result<UserModelDto>), 401)]
+        public async Task<IActionResult> NewUser(NewUserModel newUserModel)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(newUserModel.Username) &&
+                    !string.IsNullOrEmpty(newUserModel.Firstname) &&
+                    !string.IsNullOrEmpty(newUserModel.Lastname) &&
+                    !string.IsNullOrEmpty(newUserModel.Rol) &&
+                    !string.IsNullOrEmpty(newUserModel.Document) &&
+                    !string.IsNullOrEmpty(newUserModel.DocumentType))
+                {
+                    var userUpdate = await userDomain.SaveNewUser(newUserModel);
+                    return Ok(userUpdate);
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, errorManagerTool.SetError<UserModelDto>(ex, MethodBase.GetCurrentMethod()));
+            }
+        }
     }
 }

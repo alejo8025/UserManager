@@ -22,6 +22,12 @@ namespace UserManager.Infrastructure.Repositories.User
             return userDb;
         }
 
+        public async Task<UserModelDto> SaveNewUser(NewUserModel newUserModel)
+        {
+            var userDb = await GetAsyncFirst<NewUserModel, UserModelDto>(globalSettings.GetValue("SPInsertUser"), newUserModel, System.Data.CommandType.StoredProcedure);
+            return userDb;
+        }
+
         public async Task<UserModelDto> UpdateUser(UpdateUserModel updateUserModel)
         {
             var userDb = await GetAsyncFirst<UpdateUserModel, UserModelDto>(globalSettings.GetValue("SPGetUpdateUsers"), updateUserModel, System.Data.CommandType.StoredProcedure);

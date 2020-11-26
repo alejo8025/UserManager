@@ -1,6 +1,7 @@
 ﻿using Moq;
 using NUnit.Framework;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using UserManager.Domain.User;
 using UserManager.Model.Common;
@@ -41,6 +42,29 @@ namespace UserManager.UnitTest.User
             userDomain = new UserDomain(userRepositoryMock.Object, globalSettings);
             //Act
             var users = await userDomain.UpdateUser(updateUserModel);
+            //Assert
+            Assert.NotNull(users);
+        }
+
+        [Test()]
+        public async Task SaveNewUserTest()
+        {
+            //Arrange 
+            string token = Guid.NewGuid().ToString().Replace("=", "").Replace("+", "");
+            var justNumbers = new String(token.ToString().Where(Char.IsDigit).ToArray());
+            NewUserModel newUserModel = new NewUserModel
+            {
+                Lastname = $"Giraldo",
+                Firstname = $"Alejandro{justNumbers.Substring(0, 4)}",
+                Document = justNumbers.Substring(0, 4),
+                Username = $"alejandro.giraldo{justNumbers.Substring(0, 4)}",
+                Password = justNumbers.Substring(0, 8),
+                DocumentType = "CC",
+                Rol = "Administrador"
+            };
+            userDomain = new UserDomain(userRepositoryMock.Object, globalSettings);
+            //Act
+            var users = await userDomain.SaveNewUser(newUserModel);
             //Assert
             Assert.NotNull(users);
         }

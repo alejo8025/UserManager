@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UserManager.Model.Common;
@@ -39,6 +40,25 @@ namespace UserManager.Domain.User
         {
             var result = new Result<UserModelDto>();
             var userdb = await iUser.UpdateUser(updateUserModel);
+            if (userdb != null)
+            {
+                result.IsSuccess = true;
+                result.Data = userdb;
+                result.ReturnMessage = globalSettings.GetValue("ServiceConnectionSuccessful");
+            }
+            else
+            {
+                result.IsSuccess = false;
+                result.ReturnMessage = globalSettings.GetValue("ServiceConnectionUnsuccessful");
+            }
+
+            return result;
+        }
+
+        public async Task<Result<UserModelDto>> SaveNewUser(NewUserModel newUserModel)
+        {
+            var result = new Result<UserModelDto>();
+            var userdb = await iUser.SaveNewUser(newUserModel);
             if (userdb != null)
             {
                 result.IsSuccess = true;

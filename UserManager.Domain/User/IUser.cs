@@ -8,5 +8,6 @@ namespace UserManager.Domain.User
     {
         IEnumerable<UserModelDto> GetAllUsers();
         Task<UserModelDto> UpdateUser(UpdateUserModel updateUserModel);
+        Task<UserModelDto> SaveNewUser(NewUserModel newUserModel);
     }
 }

@@ -11,7 +11,7 @@ using UserManager.Model.User;
 
 namespace UserManager.Web.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
     [Authorize]
     public class LoginController : Controller
@@ -35,6 +35,7 @@ namespace UserManager.Web.Controllers
         /// <response code="200">If the userLogin is accepted</response>
         /// <response code="401">Unauthorized customer</response> 
         [HttpPost]
+        [Route("Login")]
         [ProducesResponseType(typeof(Result<UserModelDto>), 200)]
         [ProducesResponseType(typeof(Result<UserModelDto>), 401)]
         public async Task<IActionResult> UserLogin([FromBody] UserLogin userLogin)

@@ -21,7 +21,7 @@ namespace UserManager.Infrastructure.Auth
         {
 
             var responseToken = new Token();
-            var expiresToken = DateTime.Now.AddHours(1);
+            var expiresToken = DateTime.Now.AddHours(3);
             var header = new JwtHeader(
                 new SigningCredentials(
                     new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretkey)),
